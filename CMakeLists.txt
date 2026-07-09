@@ -27,6 +27,8 @@
 
     set(IMGUI_DIR ${imgui_SOURCE_DIR})
 
+    set(IMGUI_SFML_FIND_SFML OFF)
+
     FetchContent_Declare(ImGUI-SFML
         GIT_REPOSITORY https://github.com/SFML/imgui-sfml.git
         GIT_TAG v3.0
