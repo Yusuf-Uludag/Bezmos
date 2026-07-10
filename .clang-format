@@ -1,0 +1,35 @@
+# indentation
+UseTab: Never
+IndentWidth: 4
+TabWidth: 4
+NamespaceIndentation: All
+
+# sorting
+SortUsingDeclarations: Never
+
+#alignments
+PointerAlignment: Middle
+ReferenceAlignment: Left
+
+# single-liners
+PackConstructorInitializers: NextLineOnly
+AllowShortBlocksOnASingleLine: Always
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: true
+AllowShortEnumsOnASingleLine: true
+
+# braces
+BreakBeforeBraces: Custom
+BraceWrapping:
+  
+  AfterFunction: true
+  AfterControlStatement: Always
+  AfterClass: true
+  AfterStruct: true
+  AfterNamespace: true
+  AfterEnum: true
+  BeforeElse: true
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+  
