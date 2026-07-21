@@ -1,0 +1,86 @@
+#include <SFML/System/Time.hpp>
+#include <SFML/Window/Event.hpp>
+#include <memory>
+
+#include "App.h"
+#include "Layer.h"
+
+namespace Core
+{
+    App::App(const AppConfig& config)
+        : m_config(config)
+    {
+        if (config.windowSpec.title.empty())
+        {
+            this->m_config.windowSpec.title = config.name;
+        }
+
+        m_window = std::make_unique<Window>(m_config.windowSpec);
+        m_window->Create();
+    }
+
+    App::~App() {}
+
+    void App::Run()
+    {
+        m_running = true;
+
+        sf::Clock clock;
+        sf::Time previous = clock.restart();
+        while (m_running)
+        {
+            if (m_window->ShouldClose())
+            {
+                Stop();
+                break;
+            }
+
+            float elapsed = (float)clock.restart().asMicroseconds() / 1000;
+
+            m_window->PollEvents(this);
+
+            if (m_window->GetRenderWindow().hasFocus())
+            {
+                m_window->Clear();
+                for (std::unique_ptr<Layer>& layer : m_layerStack)
+                {
+                    layer->OnUpdate(elapsed);
+                }
+                for (std::unique_ptr<Layer>& layer : m_layerStack)
+                {
+                    layer->OnRender(*m_window);
+                }
+                m_window->Display();
+            }
+        }
+    }
+
+    void App::RaiseEvent(const sf::Event& event)
+    {
+        // events like sf::Event::Closed should also be handled here
+        if (event.is<sf::Event::Closed>())
+        {
+            m_window->Close();
+            return;
+        }
+
+        // traverse layers from front to back and send the event to them,
+        // if event is handled, do not send the event to other layers, just
+        // break the loop
+
+        Layer * layer;
+        for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
+        {
+            layer = it->get();
+            if (layer->OnEvent(event)) { break; }
+        }
+    }
+
+    void App::Stop() { m_running = false; }
+
+    void App::PushLayer(std::unique_ptr<Layer> layer)
+    {
+        layer->OnAttach();
+        m_layerStack.push_back(std::move(layer));
+    }
+} // namespace Core
