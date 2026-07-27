@@ -1,4 +1,7 @@
+#include "CanvasLayer.h"
 #include "Core/App.h"
+#include "MenuLayer.h"
+#include <memory>
 
 int main()
 {
@@ -8,6 +11,11 @@ int main()
     appSpec.windowSpec.height = 720;
 
     Core::App app(appSpec);
+
+    CanvasLayer canvasLayer;
+    MenuLayer menuLayer;
+
+    app.PushLayer(std::make_unique<CanvasLayer>(canvasLayer));
 
     app.Run();
 }
