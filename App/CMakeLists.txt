@@ -1,3 +1,6 @@
 add_executable(${PROJECT_NAME}
-    main.cpp
+    Main.cpp
+    CanvasLayer.h
+    MenuLayer.h
+    Dot.h
 )

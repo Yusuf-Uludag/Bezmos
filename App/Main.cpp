@@ -16,6 +16,7 @@ int main()
     MenuLayer menuLayer;
 
     app.PushLayer(std::make_unique<CanvasLayer>(canvasLayer));
+    app.PushLayer(std::make_unique<MenuLayer>(menuLayer));
 
     app.Run();
 }
