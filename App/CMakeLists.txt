@@ -5,4 +5,6 @@ add_executable(${PROJECT_NAME}
     MenuLayer.cpp
     MenuLayer.h
     Dot.h
+    Curve.h
+    Curve.cpp
 )

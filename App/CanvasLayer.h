@@ -1,4 +1,5 @@
 #include "Core/Layer.h"
+#include "Curve.h"
 
 class CanvasLayer : public Core::Layer
 {
@@ -12,4 +13,6 @@ class CanvasLayer : public Core::Layer
     void OnRender(Core::Window& window) override;
 
   private:
+    sf::VertexArray m_points;
+    Curve m_curve;
 };
