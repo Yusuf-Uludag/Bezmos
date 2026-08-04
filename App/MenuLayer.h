@@ -12,4 +12,7 @@ class MenuLayer : public Core::Layer
     void OnRender(Core::Window& window) override;
 
   private:
+    float m_tValue = 0.5f;
+    bool m_showVertices = true;
+    bool m_isAnimating = false;
 };
