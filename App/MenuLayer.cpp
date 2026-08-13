@@ -4,15 +4,13 @@
 MenuLayer::MenuLayer() {}
 MenuLayer::~MenuLayer() {}
 void MenuLayer::OnAttach() {}
-bool MenuLayer::OnEvent(const sf::Event& event)
+bool MenuLayer::OnEvent(const sf::Event& event) 
 {
     bool wantCaptureMouse = ImGui::GetIO().WantCaptureMouse;
 
-    if (wantCaptureMouse && (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased))
-    {
-        return true; 
+    if (wantCaptureMouse && (event.is<sf::Event::MouseButtonPressed>() || event.is<sf::Event::MouseButtonReleased>())) {
+        return true;
     }
-
     return false;
 }
 void MenuLayer::OnUpdate(float timeStep)
