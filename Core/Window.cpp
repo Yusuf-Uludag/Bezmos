@@ -2,6 +2,7 @@
 #include "App.h"
 #include <memory>
 #include <optional>
+#include <imgui-SFML.h>
 
 namespace Core
 {
@@ -18,11 +19,22 @@ namespace Core
         renderWindow->setVerticalSyncEnabled(config.vsyncEnabled);
         renderWindow->setFramerateLimit(config.fpsLimit);
         renderWindow->setKeyRepeatEnabled(config.keyRepeat);
+
+        // INITIALIZE IMGUI HERE!
+        if (!ImGui::SFML::Init(*renderWindow))
+        {
+            // Failed to initialize ImGui
+        }
     }
 
     void Window::Close()
     {
-        if (renderWindow) { renderWindow->close(); };
+        if (renderWindow) 
+        { 
+            // SHUTDOWN IMGUI CLEANLY
+            ImGui::SFML::Shutdown(*renderWindow);
+            renderWindow->close(); 
+        }
     }
 
     bool Window::ShouldClose() const { return !renderWindow->isOpen(); }

@@ -1,5 +1,6 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
+#include <imgui-SFML.h>
 #include <memory>
 
 #include "App.h"
@@ -26,7 +27,7 @@ namespace Core
         m_running = true;
 
         sf::Clock clock;
-        sf::Time previous = clock.restart();
+        //sf::Time previous = clock.restart();
         while (m_running)
         {
             if (m_window->ShouldClose())
@@ -35,12 +36,15 @@ namespace Core
                 break;
             }
 
-            float elapsed = (float)clock.restart().asMicroseconds() / 1000;
+            float elapsed = (float)clock.restart().asSeconds(); //Look
 
             m_window->PollEvents(this);
 
             if (m_window->GetRenderWindow().hasFocus())
             {
+                // MUST update ImGui state before updating layers or rendering!
+                ImGui::SFML::Update(m_window->GetRenderWindow(), sf::seconds(elapsed));
+
                 m_window->Clear();
                 for (std::unique_ptr<Layer>& layer : m_layerStack)
                 {
@@ -50,6 +54,10 @@ namespace Core
                 {
                     layer->OnRender(*m_window);
                 }
+
+                // Render ImGui draw commands to the SFML window
+                ImGui::SFML::Render(m_window->GetRenderWindow());
+
                 m_window->Display();
             }
         }
@@ -63,6 +71,9 @@ namespace Core
             m_window->Close();
             return;
         }
+
+        // Feed event to ImGui backend first so ImGui state updates!
+        ImGui::SFML::ProcessEvent(m_window->GetRenderWindow(), event);
 
         // traverse layers from front to back and send the event to them,
         // if event is handled, do not send the event to other layers, just
