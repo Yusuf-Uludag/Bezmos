@@ -3,6 +3,7 @@
 #include <memory>
 #include <optional>
 #include <imgui-SFML.h>
+#include <imgui.h>
 
 namespace Core
 {
@@ -20,10 +21,14 @@ namespace Core
         renderWindow->setFramerateLimit(config.fpsLimit);
         renderWindow->setKeyRepeatEnabled(config.keyRepeat);
 
-        // INITIALIZE IMGUI HERE!
-        if (!ImGui::SFML::Init(*renderWindow))
+        if (ImGui::SFML::Init(*renderWindow))
         {
-            // Failed to initialize ImGui
+            ImGuiIO& io = ImGui::GetIO();
+            io.Fonts->Clear();
+
+            io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", 22.0f);
+
+            ImGui::SFML::UpdateFontTexture();
         }
     }
 
@@ -31,7 +36,6 @@ namespace Core
     {
         if (renderWindow) 
         { 
-            // SHUTDOWN IMGUI CLEANLY
             ImGui::SFML::Shutdown(*renderWindow);
             renderWindow->close(); 
         }
@@ -51,7 +55,6 @@ namespace Core
 
     void Window::Display() { renderWindow->display(); }
 
-    /* Do not call before Create() or after Destroy() */
     sf::RenderWindow& Window::GetRenderWindow() { return *renderWindow; }
 
-} // namespace Core
+}
